@@ -1,0 +1,48 @@
+
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    tty: true
+
+    networks:
+    -  mern-stack-net
+    ports:
+      - "5173:5173"
+      # - "3002:3000"
+    links:
+    - server:server
+    depends_on:
+        # The DB container needs to be started before we start this container.
+        - server 
+        - db
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    tty: true
+    networks:
+    -  mern-stack-net
+    ports:
+      - "3001:3000"
+    links:
+      - db:db
+    depends_on:
+        # The DB container needs to be started before we start this container.
+        - db
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      PGDATA: /data/postgres
+    networks:
+      - mern-stack-net
+    ports:
+      - "5432:5432"
+
+networks:
+  mern-stack-net:
+    driver: bridge
