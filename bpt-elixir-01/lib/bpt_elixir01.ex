@@ -8,11 +8,19 @@ defmodule BptElixir01 do
 
   ## Examples
 
-      iex> BptElixir01.hello()
-      :world
+      iex> BptElixir01.create_email(email)
+      email
 
   """
-  def hello do
-    :world
+
+
+  def create_email(name) do
+    cond do
+      name == "" -> {:error, name}
+      name == " " -> {:error, name}
+      true -> {:ok,name}
+
+    end
+
   end
 end
